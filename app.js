@@ -78,42 +78,45 @@ app.get("/posts/:postName",function(req,res){
 
 
 });
-
+// added weather button & code
  const weatherCity = ["cityInput"];
 
   app.get("/weather", function(req, res){
   res.render("weather", {weatherCity: weatherCity});   
 });
+let cityName = ["cityInput]"];
 
-let city = ["cityInput"];
+app.post("/weather", function(req, res) {
+ 
+    var cityname = String(req.body.cityInput);
 
-  app.post("/weather", function(req, res){
-      var cityname = String(req.body.cityInput);
-        
-   const units = "imperial";
-   const apiKey = "67f6b382921c1e89b39b20d4f9556f22";
-   const url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&units=" + units + "&APPID=" + apiKey;
-        
-   https.get(url, function(response){
-       response.on("data", function(data){
+    const units = "imperial";
+        const apiKey = "67f6b382921c1e89b39b20d4f9556f22";
+        const url = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&units=" + units + "&APPID=" + apiKey;
+
+        https.get(url, function(response){
+        console.log(response.statusCode);
+
+        response.on("data", function(data){
             const weatherData = JSON.parse(data);
             const temp = weatherData.main.temp;
             const city = weatherData.name;
             const humidity = weatherData.main.humidity;
-           const weatherDescription = weatherData.weather[0].description;
-        
-      res.write("<h1> The current weather in " + city + " is " + weatherDescription + "<h1>");
-        
-     res.write("<h2>The temperatire is " + temp + "Degrees Fahrenheit and the humidity is " + humidity + "% <h2>");
+            const weatherDescription = weatherData.weather[0].description;
+            
+            // displays the output of the results
+            res.write("<h1> The current weather in " + city + " is " + weatherDescription + ".<h1>");
+            res.write("<h2>The Temperature is " + temp + " Degrees Fahrenheit and the humidity is " + humidity + "%. <h2>");
+
+            res.send();
+
+        });
+
+      });
+
     });
-     
-      res.send();
-     
-     
-});
-
-
-
+        
+    
 
 
 
